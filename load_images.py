@@ -9,7 +9,7 @@ import cv2
 from tqdm import tqdm
 from pathlib import Path
 
-CASME_sq_rawpic_root_path = "/kaggle/input/casme2/rawpic"
+CASME_sq_rawpic_root_path = "/kaggle/working/rawpic"
 dir_crop_root_path = "/kaggle/working/rawpic_crop"
 
 
@@ -158,3 +158,7 @@ def load_images_pkl(dataset_name):
     subjectsVideos = pickle.load(open(dataset_name + "_subjectsVideos_crop.pkl", "rb"))
     subjects = pickle.load(open(dataset_name + "_subjects_crop.pkl", "rb"))
     return images, subjectsVideos, subjects
+
+
+if __name__ == "__main__":
+    crop_images('CASME_sq')
