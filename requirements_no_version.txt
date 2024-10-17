@@ -67,7 +67,7 @@ tensorboard
 tensorboard-data-server
 tensorboard-plugin-wit
 tensorflow-estimator
-tensorflow-gpu
+tensorflow-gpu==2.4.1
 termcolor
 threadpoolctl
 tifffile
