@@ -6,53 +6,70 @@ import pickle
 import dlib
 import numpy as np
 import cv2
+from tqdm import tqdm
+from pathlib import Path
 
 CASME_sq_rawpic_root_path = "/kaggle/input/casme2/rawpic"
 dir_crop_root_path = "/kaggle/working/rawpic_crop"
 
 
+def get_rawpic_count(root_path):
+    count = 0
+    for sub_item in Path(root_path).iterdir():
+        if sub_item.is_dir():
+            for type_item in sub_item.iterdir():
+                if type_item.is_dir():
+                    count += len(glob.glob(os.path.join(
+                        str(type_item), "*.jpg")))
+    return count
+
+
 def crop_images(dataset_name):
     face_detector = dlib.get_frontal_face_detector()
     if (dataset_name == 'CASME_sq'):
-        # Save the images into folder 'rawpic_crop'
-        for subjectName in glob.glob(CASME_sq_rawpic_root_path + '/rawpic/*'):
-            dataset_rawpic = CASME_sq_rawpic_root_path + '/rawpic/' + str(subjectName.split('/')[-1]) + '/*'
+        sum_count = get_rawpic_count(os.path.join(CASME_sq_rawpic_root_path, "rawpic"))
+        print("rawpic count = ", sum_count)
+        with tqdm(total=sum_count) as tq:
+            # Save the images into folder 'rawpic_crop'
+            for subjectName in glob.glob(CASME_sq_rawpic_root_path + '/rawpic/*'):
+                dataset_rawpic = CASME_sq_rawpic_root_path + '/rawpic/' + str(subjectName.split('/')[-1]) + '/*'
 
-            # Create new directory for 'rawpic_crop'
-            dir_crop = dir_crop_root_path
-            if os.path.exists(dir_crop) == False:
-                os.mkdir(dir_crop)
+                # Create new directory for 'rawpic_crop'
+                dir_crop = dir_crop_root_path
+                if os.path.exists(dir_crop) == False:
+                    os.mkdir(dir_crop)
 
-            # Create new directory for each subject
-            dir_crop_sub = dir_crop_root_path + '/' + str(subjectName.split('/')[-1]) + '/'
-            if os.path.exists(dir_crop_sub):
-                shutil.rmtree(dir_crop_sub)
-            os.mkdir(dir_crop_sub)
-            print('Subject', subjectName.split('/')[-1])
-            for vid in glob.glob(dataset_rawpic):
-                dir_crop_sub_vid = dir_crop_sub + vid.split('/')[-1]  # Get dir of video
-                if os.path.exists(dir_crop_sub_vid):
-                    shutil.rmtree(dir_crop_sub_vid)
-                os.mkdir(dir_crop_sub_vid)
-                for dir_crop_sub_vid_img in natsort.natsorted(glob.glob(vid + '/img*.jpg')):  # Read images
-                    img = dir_crop_sub_vid_img.split('/')[-1]
-                    count = img[3:-4]  # Get img num Ex 001,002,...,2021
-                    # Load the image
-                    image = cv2.imread(dir_crop_sub_vid_img)
-                    # Run the HOG face detector on the image data
-                    detected_faces = face_detector(image, 1)
+                # Create new directory for each subject
+                dir_crop_sub = dir_crop_root_path + '/' + str(subjectName.split('/')[-1]) + '/'
+                if os.path.exists(dir_crop_sub):
+                    shutil.rmtree(dir_crop_sub)
+                os.mkdir(dir_crop_sub)
+                print('Subject', subjectName.split('/')[-1])
+                for vid in glob.glob(dataset_rawpic):
+                    dir_crop_sub_vid = dir_crop_sub + vid.split('/')[-1]  # Get dir of video
+                    if os.path.exists(dir_crop_sub_vid):
+                        shutil.rmtree(dir_crop_sub_vid)
+                    os.mkdir(dir_crop_sub_vid)
+                    for dir_crop_sub_vid_img in natsort.natsorted(glob.glob(vid + '/img*.jpg')):  # Read images
+                        img = dir_crop_sub_vid_img.split('/')[-1]
+                        count = img[3:-4]  # Get img num Ex 001,002,...,2021
+                        # Load the image
+                        image = cv2.imread(dir_crop_sub_vid_img)
+                        # Run the HOG face detector on the image data
+                        detected_faces = face_detector(image, 1)
 
-                    if (count == '001'):  # Use first frame as reference frame
-                        for face_rect in detected_faces:
-                            face_top = face_rect.top()
-                            face_bottom = face_rect.bottom()
-                            face_left = face_rect.left()
-                            face_right = face_rect.right()
+                        if (count == '001'):  # Use first frame as reference frame
+                            for face_rect in detected_faces:
+                                face_top = face_rect.top()
+                                face_bottom = face_rect.bottom()
+                                face_left = face_rect.left()
+                                face_right = face_rect.right()
 
-                    face = image[face_top:face_bottom, face_left:face_right]  # Crop the face region
-                    face = cv2.resize(face, (128, 128))  # Resize to 128x128
+                        face = image[face_top:face_bottom, face_left:face_right]  # Crop the face region
+                        face = cv2.resize(face, (128, 128))  # Resize to 128x128
 
-                    cv2.imwrite(dir_crop_sub_vid + "/img{}.jpg".format(count), face)
+                        cv2.imwrite(dir_crop_sub_vid + "/img{}.jpg".format(count), face)
+                        tq.update()
 
     # 地址还没进行修改
     elif (dataset_name == 'SAMMLV'):
