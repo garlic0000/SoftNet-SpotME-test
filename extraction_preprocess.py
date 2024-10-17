@@ -21,7 +21,7 @@ def computeStrain(u, v):
 
 def extract_preprocess(final_images, k):
     # predictor_model = "Utils\\shape_predictor_68_face_landmarks.dat"
-    predictor_model = "kaggle/working/Utils/shape_predictor_68_face_landmarks.dat"
+    predictor_model = "/kaggle/working/SoftNet-SpotME-test/Utils/shape_predictor_68_face_landmarks.dat"
     face_detector = dlib.get_frontal_face_detector()
     face_pose_predictor = dlib.shape_predictor(predictor_model)
     dataset = []
