@@ -53,7 +53,6 @@ PyQtWebEngine
 python-dateutil
 pytz
 PyWavelets
-pywin32
 pyzmq
 requests
 requests-oauthlib
