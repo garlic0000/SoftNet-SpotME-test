@@ -7,7 +7,7 @@ import dlib
 import numpy as np
 import cv2
 
-CASME_sq_root_path = "/kaggle/input/casme2"
+CASME_sq_rawpic_root_path = "/kaggle/input/casme2/rawpic"
 dir_crop_root_path = "/kaggle/working/rawpic_crop"
 
 
@@ -15,8 +15,8 @@ def crop_images(dataset_name):
     face_detector = dlib.get_frontal_face_detector()
     if (dataset_name == 'CASME_sq'):
         # Save the images into folder 'rawpic_crop'
-        for subjectName in glob.glob(CASME_sq_root_path + '/rawpic/*'):
-            dataset_rawpic = CASME_sq_root_path + '/rawpic/' + str(subjectName.split('/')[-1]) + '/*'
+        for subjectName in glob.glob(CASME_sq_rawpic_root_path + '/rawpic/*'):
+            dataset_rawpic = CASME_sq_rawpic_root_path + '/rawpic/' + str(subjectName.split('/')[-1]) + '/*'
 
             # Create new directory for 'rawpic_crop'
             dir_crop = dir_crop_root_path
