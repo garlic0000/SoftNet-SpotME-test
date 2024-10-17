@@ -8,7 +8,7 @@ import numpy as np
 import cv2
 
 CASME_sq_root_path = "/kaggle/input/casme2"
-dir_crop_root_path = "kaggle/working/rawpic_crop"
+dir_crop_root_path = "/kaggle/working/rawpic_crop"
 
 
 def crop_images(dataset_name):
