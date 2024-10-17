@@ -1,10 +1,11 @@
 import numpy as np
 import pandas as pd
 
+excel_path = "/kaggle/input/casme2/CAS(ME)2code_final(Updated).xlsx"
 
 def load_excel(dataset_name):
     if (dataset_name == 'CASME_sq'):
-        xl = pd.ExcelFile(dataset_name + '/code_final.xlsx')  # Specify directory of excel file
+        xl = pd.ExcelFile(excel_path)  # Specify directory of excel file
 
         colsName = ['subject', 'video', 'onset', 'apex', 'offset', 'au', 'emotion', 'type', 'selfReport']
         codeFinal = xl.parse(xl.sheet_names[0], header=None, names=colsName)  # Get data

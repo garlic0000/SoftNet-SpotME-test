@@ -13,6 +13,8 @@ from Utils.mean_average_precision.mean_average_precision import MeanAveragePreci
 
 random.seed(1)
 
+SOFTNet_Weights_root_path = "/kaggle/input/softnet-weights/SOFTNet_Weights"
+
 
 def pseudo_labeling(final_images, final_samples, k):
     pseudo_y = []
@@ -162,7 +164,7 @@ def spotting(result, total_gt, final_samples, subject_count, dataset, k, metric_
             plt.xlabel('Frame')
             plt.ylabel('Score')
         threshold = score_plot_agg.mean() + p * (
-                    max(score_plot_agg) - score_plot_agg.mean())  # Moilanen threshold technique
+                max(score_plot_agg) - score_plot_agg.mean())  # Moilanen threshold technique
         peaks, _ = find_peaks(score_plot_agg[:, 0], height=threshold[0], distance=k)
         if (
                 len(peaks) == 0):  # Occurs when no peak is detected, simply give a value to pass the exception in mean_average_precision
@@ -212,7 +214,7 @@ def training(X, y, groupsLabel, dataset_name, expression_type, final_samples, k,
 
         print('------Initializing SOFTNet-------')  # To reset the model at every LOSO testing
 
-        path = 'SOFTNet_Weights\\' + dataset_name + '\\' + expression_type + '\\s' + str(subject_count) + '.hdf5'
+        path = SOFTNet_Weights_root_path + '/' + dataset_name + '/' + expression_type + '/s' + str(subject_count) + '.hdf5'
         if (train):
             # Downsampling non expression samples the dataset by 1/2 to reduce dataset bias
             print('Dataset Labels', Counter(y_train))
