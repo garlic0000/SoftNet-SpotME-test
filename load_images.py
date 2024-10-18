@@ -25,6 +25,14 @@ def get_rawpic_count(root_path):
 
 
 def crop_images(dataset_name):
+    """
+
+    Args:
+        dataset_name:
+
+    Returns:
+
+    """
     face_detector = dlib.get_frontal_face_detector()
     if (dataset_name == 'CASME_sq'):
         sum_count = get_rawpic_count(CASME_sq_rawpic_root_path)
