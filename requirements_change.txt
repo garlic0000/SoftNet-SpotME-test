@@ -85,5 +85,6 @@ wheel==0.36.2
 wincertstore==0.2
 wrapt==1.12.1
 xlrd==1.2.0
+# 后续新增
 mkl
 tqdm
