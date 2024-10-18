@@ -5,7 +5,7 @@ excel_path = "/kaggle/input/casme-sq/CAS(ME)2code_final.xlsx"
 
 
 def load_excel(dataset_name):
-    if (dataset_name == 'CASME_sq'):
+    if dataset_name == 'CASME_sq':
         xl = pd.ExcelFile(excel_path)  # Specify directory of excel file
 
         colsName = ['subject', 'video', 'onset', 'apex', 'offset', 'au', 'emotion', 'type', 'selfReport']
