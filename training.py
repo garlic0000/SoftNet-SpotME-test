@@ -215,7 +215,7 @@ def training(X, y, groupsLabel, dataset_name, expression_type, final_samples, k,
         print('------Initializing SOFTNet-------')  # To reset the model at every LOSO testing
 
         path = SOFTNet_Weights_root_path + '/' + dataset_name + '/' + expression_type + '/s' + str(subject_count) + '.hdf5'
-        if (train):
+        if train:
             # Downsampling non expression samples the dataset by 1/2 to reduce dataset bias
             print('Dataset Labels', Counter(y_train))
             unique, uni_count = np.unique(y_train, return_counts=True)
