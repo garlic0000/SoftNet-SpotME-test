@@ -6,7 +6,7 @@ from extraction_preprocess import *
 from training import *
 
 
-##Note that the whole process will take a long time... please be patient
+# Note that the whole process will take a long time... please be patient
 def main(config):
     # Define the dataset and expression to spot
     dataset_name = config.dataset_name
@@ -50,6 +50,7 @@ def main(config):
     TP, FP, FN, metric_fn = training(X, y, groupsLabel, dataset_name, expression_type, final_samples, k, dataset, train,
                                      show_plot)
     final_evaluation(TP, FP, FN, metric_fn)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
