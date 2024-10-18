@@ -33,6 +33,23 @@ def main(config):
     print('\n ------ Computing k ------')
     k = cal_k(dataset_name, expression_type, final_samples)
 
+    # Feature Extraction & Pre-processing
+    print('\n ------ Feature Extraction & Pre-processing ------')
+    dataset = extract_preprocess(final_images, k)
+
+    # Pseudo-labeling
+    print('\n ------ Pseudo-Labeling ------')
+    pseudo_y = pseudo_labeling(final_images, final_samples, k)
+
+    # LOSO
+    print('\n ------ Leave one Subject Out ------')
+    X, y, groupsLabel = loso(dataset, pseudo_y, final_images, final_samples, k)
+
+    # Model Training & Evaluation
+    print('\n ------ SOFTNet Training & Testing ------')
+    TP, FP, FN, metric_fn = training(X, y, groupsLabel, dataset_name, expression_type, final_samples, k, dataset, train,
+                                     show_plot)
+    final_evaluation(TP, FP, FN, metric_fn)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
