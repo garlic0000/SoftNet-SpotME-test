@@ -34,8 +34,10 @@ natsort
 networkx
 numpy
 oauthlib
-opencv-contrib-python-headless
-opencv-python-headless
+# 安装opencv_contrib_python-4.10.0.84-cp37-abi3-linux_x86_64.whl
+# 通过该whl安装完整的whl了
+# opencv-contrib-python-headless
+# opencv-python-headless
 opt-einsum
 pandas
 parso
@@ -53,6 +55,7 @@ PyQtWebEngine
 python-dateutil
 pytz
 PyWavelets
+# linux系统 所以注释
 # pywin32
 pyzmq
 requests
@@ -68,7 +71,7 @@ tensorboard
 tensorboard-data-server
 tensorboard-plugin-wit
 tensorflow-estimator
-tensorflow-gpu==2.4.1
+tensorflow-gpu
 termcolor
 threadpoolctl
 tifffile
