@@ -144,17 +144,17 @@ def load_images(dataset_name):
     subjects = []
     subjectsVideos = []
 
-    if (dataset_name == 'CASME_sq'):
-        for i, dir_sub in enumerate(natsort.natsorted(glob.glob(dir_crop_root_path + "/rawpic_crop/*"))):
-            print('Subject: ' + dir_sub.split('/')[-1])
-            subjects.append(dir_sub.split('/')[-1])
+    if dataset_name == 'CASME_sq':
+        for i, dir_sub in enumerate(natsort.natsorted(Path(dir_crop_root_path).iterdir())):
+            print('Subject: ' + dir_sub.name)
+            subjects.append(dir_sub.name)
             subjectsVideos.append([])
-            for dir_sub_vid in natsort.natsorted(glob.glob(dir_sub + "/*")):
-                subjectsVideos[-1].append(dir_sub_vid.split('/')[-1].split('_')[1][
+            for dir_sub_vid in natsort.natsorted(dir_sub.iterdir()):
+                subjectsVideos[-1].append(dir_sub_vid.name.split('_')[1][
                                           :4])  # Ex:'CASME_sq/rawpic_aligned/s15/15_0101disgustingteeth' -> '0101'
                 image = []
-                for dir_sub_vid_img in natsort.natsorted(glob.glob(dir_sub_vid + "/img*.jpg")):
-                    image.append(cv2.imread(dir_sub_vid_img, 0))
+                for dir_sub_vid_img in natsort.natsorted(glob.glob(os.path.join(str(dir_sub_vid), "*.jpg"))):
+                    image.append(cv2.imread(dir_sub_vid_img, 0))  # 加载灰度图像
                 images.append(np.array(image))
 
     elif (dataset_name == 'SAMMLV'):

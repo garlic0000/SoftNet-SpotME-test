@@ -3,6 +3,7 @@ import pandas as pd
 
 excel_path = "/kaggle/input/casme2/CAS(ME)2code_final(Updated).xlsx"
 
+
 def load_excel(dataset_name):
     if (dataset_name == 'CASME_sq'):
         xl = pd.ExcelFile(excel_path)  # Specify directory of excel file
@@ -58,17 +59,17 @@ def load_gt(dataset_name, expression_type, images, subjectsVideos, subjects, cod
         for videoIndex, videoCode in enumerate(sub_vid_each):
             on_off = []
             for i, row in codeFinal.iterrows():
-                if (row['subjectCode'] == subjects[
-                    sub_video_each_index]):  # S15, S16... for CAS(ME)^2, 001, 002... for SAMMLV
-                    if (row['videoCode'] == videoCode):
-                        if (row['type'] == dataset_expression_type):  # Micro-expression or macro-expression
-                            if (row['offset'] == 0):  # Take apex if offset is 0
+                if row['subjectCode'] == subjects[
+                    sub_video_each_index]:  # S15, S16... for CAS(ME)^2, 001, 002... for SAMMLV
+                    if row['videoCode'] == videoCode:
+                        if row['type'] == dataset_expression_type:  # Micro-expression or macro-expression
+                            if row['offset'] == 0:  # Take apex if offset is 0
                                 on_off.append([int(row['onset'] - 1), int(row['apex'] - 1)])
                             else:
-                                if (dataset_expression_type != 'Macro' or int(
-                                        row['onset']) != 0):  # Ignore the samples that is extremely long in SAMMLV
+                                if dataset_expression_type != 'Macro' or int(
+                                        row['onset']) != 0:  # Ignore the samples that is extremely long in SAMMLV
                                     on_off.append([int(row['onset'] - 1), int(row['offset'] - 1)])
-            if (len(on_off) > 0):
+            if len(on_off) > 0:
                 vid_need.append(vid_count)  # To get the video that is needed
             ground_truth[-1].append(on_off)
             vid_count += 1
@@ -82,7 +83,7 @@ def load_gt(dataset_name, expression_type, images, subjectsVideos, subjects, cod
         final_samples.append([])
         final_videos.append([])
         for samplesIndex, samples in enumerate(subject):
-            if (count in vid_need):
+            if count in vid_need:
                 final_samples[-1].append(samples)
                 final_videos[-1].append(subjectsVideos[subjectIndex][samplesIndex])
                 final_subjects.append(subjects[subjectIndex])
@@ -106,3 +107,4 @@ def cal_k(dataset_name, expression_type, final_samples):
     k = int((N + 1) / 2)
     print('k (Half of average length of expression) =', k)
     return k
+
