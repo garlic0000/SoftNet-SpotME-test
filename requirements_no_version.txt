@@ -74,7 +74,7 @@ spyder-kernels
 # 自 TensorFlow 2.0 起，tensorflow 包已经包括了 GPU 支持。
 # 可以直接安装 tensorflow 而不是 tensorflow-gpu
 # tensorflow-gpu
-# 最前面四个包不需要分别安装 全部包含在tensorflow 
+# 最前面四个包不需要分别安装 全部包含在tensorflow 中
 tensorflow
 termcolor
 threadpoolctl
