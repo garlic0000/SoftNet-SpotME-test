@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-excel_path = "/kaggle/input/casme2/CAS(ME)2code_final(Updated).xlsx"
+excel_path = "/kaggle/input/casme-sq/CAS(ME)2code_final.xlsx"
 
 
 def load_excel(dataset_name):
