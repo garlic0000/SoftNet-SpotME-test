@@ -59,8 +59,7 @@ def load_gt(dataset_name, expression_type, images, subjectsVideos, subjects, cod
         for videoIndex, videoCode in enumerate(sub_vid_each):
             on_off = []
             for i, row in codeFinal.iterrows():
-                if row['subjectCode'] == subjects[
-                    sub_video_each_index]:  # S15, S16... for CAS(ME)^2, 001, 002... for SAMMLV
+                if row['subjectCode'] == subjects[sub_video_each_index]:  # S15, S16... for CAS(ME)^2, 001, 002... for SAMMLV
                     if row['videoCode'] == videoCode:
                         if row['type'] == dataset_expression_type:  # Micro-expression or macro-expression
                             if row['offset'] == 0:  # Take apex if offset is 0
@@ -107,4 +106,3 @@ def cal_k(dataset_name, expression_type, final_samples):
     k = int((N + 1) / 2)
     print('k (Half of average length of expression) =', k)
     return k
-
