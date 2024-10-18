@@ -67,11 +67,15 @@ scipy
 setuptools
 six
 spyder-kernels
-tensorboard
-tensorboard-data-server
-tensorboard-plugin-wit
-tensorflow-estimator
-tensorflow-gpu
+# tensorboard
+# tensorboard-data-server
+# tensorboard-plugin-wit
+# tensorflow-estimator
+# 自 TensorFlow 2.0 起，tensorflow 包已经包括了 GPU 支持。
+# 可以直接安装 tensorflow 而不是 tensorflow-gpu
+# tensorflow-gpu
+# 最前面四个包不需要分别安装 全部包含在tensorflow 
+tensorflow
 termcolor
 threadpoolctl
 tifffile
