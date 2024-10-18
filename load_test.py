@@ -19,7 +19,7 @@ def main(config):
     # Load Images
     print('\n ------ Croping Images ------')
     # Can comment this out after completed on the dataset specified and intend to try on another expression_type
-    crop_images(dataset_name)
+    # crop_images(dataset_name)
     print("\n ------ Loading Images ------")
     images, subjects, subjectsVideos = load_images(dataset_name)
     # images = pickle.load( open( dataset_name + "_images_crop.pkl", "rb" ) )
