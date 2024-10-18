@@ -27,12 +27,12 @@ def get_rawpic_count(root_path):
 def crop_images(dataset_name):
     face_detector = dlib.get_frontal_face_detector()
     if (dataset_name == 'CASME_sq'):
-        sum_count = get_rawpic_count(os.path.join(CASME_sq_rawpic_root_path, "rawpic"))
+        sum_count = get_rawpic_count(CASME_sq_rawpic_root_path)
         print("rawpic count = ", sum_count)
         with tqdm(total=sum_count) as tq:
             # Save the images into folder 'rawpic_crop'
-            for subjectName in glob.glob(CASME_sq_rawpic_root_path + '/rawpic/*'):
-                dataset_rawpic = CASME_sq_rawpic_root_path + '/rawpic/' + str(subjectName.split('/')[-1]) + '/*'
+            for subjectName in glob.glob(CASME_sq_rawpic_root_path + '/*'):
+                dataset_rawpic = CASME_sq_rawpic_root_path + '/' + str(subjectName.split('/')[-1]) + '/*'
 
                 # Create new directory for 'rawpic_crop'
                 dir_crop = dir_crop_root_path
