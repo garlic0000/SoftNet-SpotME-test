@@ -12,6 +12,7 @@ from pathlib import Path
 CASME_sq_rawpic_root_path = "/kaggle/working/rawpic"
 dir_crop_root_path = "/kaggle/working/rawpic_crop"
 
+detector_model = "/kaggle/working/SoftNet-SpotME-test/Utils/mmod_human_face_detector.dat"
 
 def get_rawpic_count(root_path):
     """
@@ -44,8 +45,11 @@ def crop_images(dataset_name):
     Returns: 已裁剪和缩放的图片
 
     """
-    # 加载 HOG 人脸检测器
-    face_detector = dlib.get_frontal_face_detector()
+    # # 加载 HOG 人脸检测器
+    # face_detector = dlib.get_frontal_face_detector()
+    # 使用cnn_face_detector代替face_detector
+    cnn_face_detector = dlib.cnn_face_detection_model_v1(detector_model)
+
     if dataset_name == 'CASME_sq':
         sum_count = get_rawpic_count(CASME_sq_rawpic_root_path)
         print("rawpic count = ", sum_count)
@@ -84,17 +88,24 @@ def crop_images(dataset_name):
                         img_name = img[3:-4]  # 获取 '001'
                         # 读入图片
                         image = cv2.imread(dir_crop_sub_vid_img)
-                        # 运行HOG人脸检测器
-                        detected_faces = face_detector(image, 1)
-
+                        # # 运行HOG人脸检测器
+                        # detected_faces = face_detector(image, 1)
+                        # 使用cnn_face_detector代替face_detector
+                        detected_faces = cnn_face_detector(image, 1)
                         if img_name == '001':
                             # 使用第一帧（图片名为 001）的面部作为参考框架来确定面部的裁剪边界
                             # 后续帧中将使用同样的边界
                             for face_rect in detected_faces:
-                                face_top = face_rect.top()
-                                face_bottom = face_rect.bottom()
-                                face_left = face_rect.left()
-                                face_right = face_rect.right()
+                                # face_top = face_rect.top()
+                                # face_bottom = face_rect.bottom()
+                                # face_left = face_rect.left()
+                                # face_right = face_rect.right()
+                                # cnn_face_detector(image, 1) 返回的是包含 dlib.mmod_rectangle 对象的列表
+                                # 使用 face_rect.rect.top()等来访问面部边界框的位置
+                                face_top = face_rect.rect.top()
+                                face_bottom = face_rect.rect.bottom()
+                                face_left = face_rect.rect.left()
+                                face_right = face_rect.rect.right()
 
                         face = image[face_top:face_bottom, face_left:face_right]  # 裁剪人脸区域
                         face = cv2.resize(face, (128, 128))  # 调整尺寸为 128x128
