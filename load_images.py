@@ -14,6 +14,7 @@ dir_crop_root_path = "/kaggle/working/rawpic_crop"
 
 detector_model = "/kaggle/working/SoftNet-SpotME-test/Utils/mmod_human_face_detector.dat"
 
+
 def get_rawpic_count(root_path):
     """
     递归地统计数据集中所有 .jpg 图片的数量
@@ -113,41 +114,41 @@ def crop_images(dataset_name):
                         cv2.imwrite(os.path.join(dir_crop_sub_vid, "img{}.jpg").format(img_name), face)
                         tq.update()  # 更新进度
 
-    # 地址还没进行修改
-    elif (dataset_name == 'SAMMLV'):
-        if os.path.exists(dataset_name + '/SAMM_longvideos_crop'):  # Delete dir if exist and create new dir
-            shutil.rmtree(dataset_name + '/SAMM_longvideos_crop')
-        os.mkdir(dataset_name + '/SAMM_longvideos_crop')
-
-        for vid in glob.glob(dataset_name + '/SAMM_longvideos/*'):
-            count = 0
-            dir_crop = dataset_name + '/SAMM_longvideos_crop/' + vid.split('/')[-1]
-
-            if os.path.exists(dir_crop):  # Delete dir if exist and create new dir
-                shutil.rmtree(dir_crop)
-            os.mkdir(dir_crop)
-            print('Video', vid.split('/')[-1])
-            for dir_crop_img in natsort.natsorted(glob.glob(vid + '/*.jpg')):
-                img = dir_crop_img.split('/')[-1].split('.')[0]
-                count = img[-4:]  # Get img num Ex 0001,0002,...,2021
-                # Load the image
-                image = cv2.imread(dir_crop_img)
-
-                # Run the HOG face detector on the image data
-                detected_faces = face_detector(image, 1)
-
-                # Loop through each face we found in the image
-                if (count == '0001'):  # Use first frame as reference frame
-                    for i, face_rect in enumerate(detected_faces):
-                        face_top = face_rect.top()
-                        face_bottom = face_rect.bottom()
-                        face_left = face_rect.left()
-                        face_right = face_rect.right()
-
-                face = image[face_top:face_bottom, face_left:face_right]
-                face = cv2.resize(face, (128, 128))
-
-                cv2.imwrite(dir_crop + "/{}.jpg".format(count), face)
+    # # 地址还没进行修改
+    # elif (dataset_name == 'SAMMLV'):
+    #     if os.path.exists(dataset_name + '/SAMM_longvideos_crop'):  # Delete dir if exist and create new dir
+    #         shutil.rmtree(dataset_name + '/SAMM_longvideos_crop')
+    #     os.mkdir(dataset_name + '/SAMM_longvideos_crop')
+    #
+    #     for vid in glob.glob(dataset_name + '/SAMM_longvideos/*'):
+    #         count = 0
+    #         dir_crop = dataset_name + '/SAMM_longvideos_crop/' + vid.split('/')[-1]
+    #
+    #         if os.path.exists(dir_crop):  # Delete dir if exist and create new dir
+    #             shutil.rmtree(dir_crop)
+    #         os.mkdir(dir_crop)
+    #         print('Video', vid.split('/')[-1])
+    #         for dir_crop_img in natsort.natsorted(glob.glob(vid + '/*.jpg')):
+    #             img = dir_crop_img.split('/')[-1].split('.')[0]
+    #             count = img[-4:]  # Get img num Ex 0001,0002,...,2021
+    #             # Load the image
+    #             image = cv2.imread(dir_crop_img)
+    #
+    #             # Run the HOG face detector on the image data
+    #             detected_faces = face_detector(image, 1)
+    #
+    #             # Loop through each face we found in the image
+    #             if (count == '0001'):  # Use first frame as reference frame
+    #                 for i, face_rect in enumerate(detected_faces):
+    #                     face_top = face_rect.top()
+    #                     face_bottom = face_rect.bottom()
+    #                     face_left = face_rect.left()
+    #                     face_right = face_rect.right()
+    #
+    #             face = image[face_top:face_bottom, face_left:face_right]
+    #             face = cv2.resize(face, (128, 128))
+    #
+    #             cv2.imwrite(dir_crop + "/{}.jpg".format(count), face)
 
 
 def load_images(dataset_name):
