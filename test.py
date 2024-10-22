@@ -45,7 +45,7 @@ print(cv2.getBuildInformation())
 
 try:
     print("测试OpenCV CUDA加速")
-    img = cv2.imread('test.jpg', cv2.IMREAD_COLOR)
+    img = cv2.imread('/kaggle/working/SoftNet-SpotME-test/test.jpg', cv2.IMREAD_COLOR)
     img_gpu = cv2.cuda_GpuMat()
     img_gpu.upload(img)
     img_blur = cv2.cuda.bilateralFilter(img_gpu, 15, 75, 75)

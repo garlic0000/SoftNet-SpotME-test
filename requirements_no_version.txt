@@ -86,7 +86,8 @@ urllib3
 wcwidth
 Werkzeug
 wheel
-wincertstore
+# 是Windows平台特定的包
+# wincertstore
 wrapt
 xlrd
 # 后续新增
