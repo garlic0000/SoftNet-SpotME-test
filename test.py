@@ -69,13 +69,14 @@ def test_random_noise():
     plt.show()
 
 
-# 测试 MeanAveragePrecision2d
 def test_mean_average_precision():
     print("测试 MeanAveragePrecision2d")
-    gt = np.array([[50, 50, 100, 100, 1, 1, 1]])  # 真实框，格式为 (x1, y1, x2, y2, score, class_id, ignore)
-    pred = np.array([[55, 55, 105, 105, 0.9, 1]])  # 预测框，格式为 (x1, y1, x2, y2, score, class_id)
-    mean_ap = MeanAveragePrecision2d(num_classes=1)  # 假设只有一个类
+    gt = np.array([[50, 50, 100, 100, 1, 1, 0]])  # 真实框，格式为 (x1, y1, x2, y2, score, class_id, ignore)
+    pred = np.array([[55, 55, 90, 90, 0.9, 1]])  # 更小的预测框
+    mean_ap = MeanAveragePrecision2d(num_classes=1)
+    # 添加预测和真实框
     mean_ap.add(pred, gt)
+    # 计算并输出 mAP
     ap = mean_ap.value(iou_thresholds=0.5)
     print("mAP 测试结果:", ap)
 
