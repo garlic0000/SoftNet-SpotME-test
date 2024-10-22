@@ -69,10 +69,12 @@ def crop_images(dataset_name):
                 if os.path.exists(dir_crop_sub):
                     shutil.rmtree(dir_crop_sub)
                 os.mkdir(dir_crop_sub)
+                print()  # 输出一个空行
                 print('Subject', sub.name)
                 for vid in sub.iterdir():
                     if not vid.is_dir():
                         continue
+                    print()  # 输出一个空行
                     print("Video", vid.name)
                     # 为每段视频创建目录
                     dir_crop_sub_vid = os.path.join(dir_crop_sub, vid.name)
