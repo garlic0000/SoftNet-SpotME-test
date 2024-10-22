@@ -72,8 +72,8 @@ def test_random_noise():
 # 测试 MeanAveragePrecision2d
 def test_mean_average_precision():
     print("测试 MeanAveragePrecision2d")
-    gt = np.array([[50, 50, 100, 100, 1]])  # 真实框
-    pred = np.array([[55, 55, 100, 100, 0.9]])  # 预测框
+    gt = np.array([[50, 50, 100, 100, 1]])  # 真实框，格式为 (x1, y1, x2, y2, class_id)
+    pred = np.array([[55, 55, 105, 105, 0.9, 1]])  # 预测框，增加了 class_id
     mean_ap = MeanAveragePrecision2d(num_classes=1)  # 假设只有一个类
     mean_ap.add(pred, gt)
     ap = mean_ap.value(iou_thresholds=0.5)
@@ -87,5 +87,3 @@ if __name__ == "__main__":
     test_opencv_cuda()
     test_random_noise()
     test_mean_average_precision()
-
-
