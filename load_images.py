@@ -9,7 +9,7 @@ import cv2
 from tqdm import tqdm
 from pathlib import Path
 
-CASME_sq_rawpic_root_path = "/kaggle/working/rawpic"
+CASME_sq_rawpic_root_path = "/kaggle/input/casme-sq/rawpic/rawpic"
 dir_crop_root_path = "/kaggle/working/rawpic_crop"
 
 detector_model = "/kaggle/working/SoftNet-SpotME-test/Utils/mmod_human_face_detector.dat"
