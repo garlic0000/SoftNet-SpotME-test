@@ -92,3 +92,4 @@ wrapt
 xlrd
 # 后续新增
 tqdm
+openpyxl
