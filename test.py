@@ -66,7 +66,7 @@ def test_opencv_cuda():
         # 检查支持的光流算法
         optical_flow_algorithms = {
             "Brox Optical Flow": cv2.cuda.BroxOpticalFlow_create,
-            "DualTVL1 Optical Flow 1": cv2.cuda.DualTVL1OpticalFlow_create,
+            # "DualTVL1 Optical Flow 1": cv2.cuda.DualTVL1OpticalFlow_create,
             "DualTVL1 Optical Flow 2": cv2.cuda.OpticalFlowDual_TVL1.create,
             "Farneback Optical Flow": cv2.cuda.FarnebackOpticalFlow_create,
             "SparsePyrLK Optical Flow": cv2.cuda.SparsePyrLKOpticalFlow_create,
