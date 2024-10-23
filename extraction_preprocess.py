@@ -101,13 +101,14 @@ def extract_preprocess(final_images, k):
                 # optical_flow = cv2.DualTVL1OpticalFlow_create() #Depends on cv2 version
                 # optical_flow = cv2.optflow.DualTVL1OpticalFlow_create()
                 # 使用gpu
-                optical_flow = cv2.cuda.DualTVL1OpticalFlow_create()
-                gpu_img1 = cv2.cuda_GpuMat()
-                gpu_img2 = cv2.cuda_GpuMat()
+                optical_flow = cv2.cuda.OpticalFlowDual_TVL1.create()
+                gpu_img1 = cv2.cuda.GpuMat()
+                gpu_img2 = cv2.cuda.GpuMat()
                 gpu_img1.upload(img1)
                 gpu_img2.upload(img2)
                 # flow = optical_flow.calc(img1, img2, None)
                 flow = optical_flow.calc(gpu_img1, gpu_img2, None)
+                flow = flow.download()  # 从 GPU 下载到 CPU
                 magnitude, angle = cv2.cartToPolar(flow[..., 0], flow[..., 1])
                 u, v = pol2cart(magnitude, angle)
                 os = computeStrain(u, v)

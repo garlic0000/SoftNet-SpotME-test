@@ -53,46 +53,38 @@ def test_opencv_cuda():
     try:
         print("测试 OpenCV CUDA 加速")
         img = cv2.imread('/kaggle/working/SoftNet-SpotME-test/test.jpg', cv2.IMREAD_COLOR)
-        img_gpu = cv2.cuda_GpuMat()
+        if img is None:
+            print("无法加载测试图像，请检查路径")
+            return
+
+        img_gpu = cv2.cuda.GpuMat()
         img_gpu.upload(img)
         img_blur = cv2.cuda.bilateralFilter(img_gpu, 15, 75, 75)
         result = img_blur.download()
         print("OpenCV CUDA 加速可用")
 
         # 检查支持的光流算法
-        print("检测 OpenCV 支持的 CUDA 光流算法:")
-        try:
-            optical_flow = cv2.cuda.BroxOpticalFlow_create()
-            print("Brox Optical Flow is supported")
-        except AttributeError:
-            print("Brox Optical Flow is not supported")
+        optical_flow_algorithms = {
+            "Brox Optical Flow": cv2.cuda.BroxOpticalFlow_create,
+            "DualTVL1 Optical Flow 1": cv2.cuda.DualTVL1OpticalFlow_create,
+            "DualTVL1 Optical Flow 2": cv2.cuda.OpticalFlowDual_TVL1.create,
+            "Farneback Optical Flow": cv2.cuda.FarnebackOpticalFlow_create,
+            "SparsePyrLK Optical Flow": cv2.cuda.SparsePyrLKOpticalFlow_create,
+            "DensePyrLK Optical Flow": cv2.cuda.DensePyrLKOpticalFlow_create,
+        }
 
-        try:
-            optical_flow = cv2.cuda.DualTVL1OpticalFlow_create()
-            print("DualTVL1 Optical Flow is supported")
-        except AttributeError:
-            print("DualTVL1 Optical Flow is not supported")
-
-        try:
-            optical_flow = cv2.cuda.FarnebackOpticalFlow_create()
-            print("Farneback Optical Flow is supported")
-        except AttributeError:
-            print("Farneback Optical Flow is not supported")
-
-        try:
-            optical_flow = cv2.cuda.SparsePyrLKOpticalFlow_create()
-            print("SparsePyrLK Optical Flow is supported")
-        except AttributeError:
-            print("SparsePyrLK Optical Flow is not supported")
-
-        try:
-            optical_flow = cv2.cuda.DensePyrLKOpticalFlow_create()
-            print("DensePyrLK Optical Flow is supported")
-        except AttributeError:
-            print("DensePyrLK Optical Flow is not supported")
+        for name, create_func in optical_flow_algorithms.items():
+            try:
+                optical_flow = create_func()
+                print(f"{name} is supported")
+            except AttributeError:
+                print(f"{name} is not supported")
+            except Exception as e:
+                print(f"检测 {name} 时发生错误: {e}")
 
     except Exception as e:
         print("OpenCV CUDA 加速不可用:", e)
+
 
 
 # 测试 skimage 随机噪声
