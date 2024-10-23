@@ -19,9 +19,11 @@ def computeStrain(u, v):
     v_x = v - pd.DataFrame(v).shift(-1, axis=1)
     # os = np.array(np.sqrt(u_x ** 2 + v_y ** 2 + 1 / 2 * (u_y + v_x) ** 2).ffill(1).ffill(0))
     # TypeError: NDFrame.ffill() takes 1 positional argument but 2 were given
-    # 使用 fillna 来替代 ffill
     os = np.sqrt(u_x ** 2 + v_y ** 2 + 0.5 * (u_y + v_x) ** 2)
-    os = os.fillna(method='ffill', axis=1).fillna(method='ffill', axis=0)
+    # 确保 os 是 pandas 的 DataFrame，以便使用 ffill
+    os = pd.DataFrame(os)
+    # 使用 ffill 方法填充 NaN 值
+    os = os.ffill(axis=1).ffill(axis=0)
     return os
 
 
