@@ -146,7 +146,9 @@ def SOFTNet():
     # Takes input u,v,s
     model = keras.models.Model(inputs=[inputs1, inputs2, inputs3], outputs=outputs)
     # compile
-    sgd = keras.optimizers.SGD(lr=0.0005)
+    # sgd = keras.optimizers.SGD(lr=0.0005)
+    # 新版
+    sgd = keras.optimizers.SGD(learning_rate=0.0005)
     model.compile(loss="mse", optimizer=sgd, metrics=[tf.keras.metrics.MeanAbsoluteError()])
     return model
 
