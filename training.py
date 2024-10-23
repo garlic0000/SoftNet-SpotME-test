@@ -263,12 +263,17 @@ def training(X, y, groupsLabel, dataset_name, expression_type, final_samples, k,
         else:
             model.load_weights(path)  # Load Pretrained Weights
 
-        result = model.predict_generator(
+        # result = model.predict_generator(
+        #     generator(X_test, y_test, batch_size),
+        #     steps=len(X_test) / batch_size,
+        #     verbose=1
+        # )
+        # 更新
+        result = model.predict(
             generator(X_test, y_test, batch_size),
             steps=len(X_test) / batch_size,
             verbose=1
         )
-
         preds, gt, total_gt = spotting(result, total_gt, final_samples, subject_count, dataset, k, metric_fn, p,
                                        show_plot)
         TP, FP, FN = evaluation(preds, gt, total_gt, metric_fn)
