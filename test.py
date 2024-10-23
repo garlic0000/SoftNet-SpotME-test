@@ -79,8 +79,10 @@ def test_opencv_cuda():
                 print(f"{name} is supported")
             except AttributeError:
                 print(f"{name} is not supported")
+                continue
             except Exception as e:
                 print(f"检测 {name} 时发生错误: {e}")
+                continue
 
     except Exception as e:
         print("OpenCV CUDA 加速不可用:", e)
