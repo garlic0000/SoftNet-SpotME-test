@@ -44,10 +44,11 @@ def test_tensorflow_gpu():
     print("TensorFlow 矩阵乘法耗时: {:.2f} 秒".format(end_time - start_time))
 
 
-# 测试 OpenCV CUDA 支持
+# 测试 OpenCV CUDA 支持和光流算法检测
 def test_opencv_cuda():
     print("测试 OpenCV 是否支持 GPU")
     print(cv2.getBuildInformation())
+    help(cv2.cuda)
 
     try:
         print("测试 OpenCV CUDA 加速")
@@ -57,6 +58,39 @@ def test_opencv_cuda():
         img_blur = cv2.cuda.bilateralFilter(img_gpu, 15, 75, 75)
         result = img_blur.download()
         print("OpenCV CUDA 加速可用")
+
+        # 检查支持的光流算法
+        print("检测 OpenCV 支持的 CUDA 光流算法:")
+        try:
+            optical_flow = cv2.cuda.BroxOpticalFlow_create()
+            print("Brox Optical Flow is supported")
+        except AttributeError:
+            print("Brox Optical Flow is not supported")
+
+        try:
+            optical_flow = cv2.cuda.DualTVL1OpticalFlow_create()
+            print("DualTVL1 Optical Flow is supported")
+        except AttributeError:
+            print("DualTVL1 Optical Flow is not supported")
+
+        try:
+            optical_flow = cv2.cuda.FarnebackOpticalFlow_create()
+            print("Farneback Optical Flow is supported")
+        except AttributeError:
+            print("Farneback Optical Flow is not supported")
+
+        try:
+            optical_flow = cv2.cuda.SparsePyrLKOpticalFlow_create()
+            print("SparsePyrLK Optical Flow is supported")
+        except AttributeError:
+            print("SparsePyrLK Optical Flow is not supported")
+
+        try:
+            optical_flow = cv2.cuda.DensePyrLKOpticalFlow_create()
+            print("DensePyrLK Optical Flow is supported")
+        except AttributeError:
+            print("DensePyrLK Optical Flow is not supported")
+
     except Exception as e:
         print("OpenCV CUDA 加速不可用:", e)
 
@@ -71,6 +105,7 @@ def test_random_noise():
     plt.show()
 
 
+# 测试 MeanAveragePrecision2d
 def test_mean_average_precision():
     print("测试 MeanAveragePrecision2d")
     gt = np.array([[50, 50, 100, 100, 1, 1, 0]])  # 真实框，格式为 (x1, y1, x2, y2, score, class_id, ignore)
@@ -87,6 +122,7 @@ def test_mean_average_precision():
 if __name__ == "__main__":
     configure_gpu()
     test_tensorflow_gpu()
-    test_opencv_cuda()
+    test_opencv_cuda()  # 测试 OpenCV CUDA 支持和光流算法检测
     test_random_noise()
     test_mean_average_precision()
+
