@@ -95,8 +95,15 @@ def extract_preprocess(final_images, k):
 
                 # Compute Optical Flow Features
                 # optical_flow = cv2.DualTVL1OpticalFlow_create() #Depends on cv2 version
-                optical_flow = cv2.optflow.DualTVL1OpticalFlow_create()
-                flow = optical_flow.calc(img1, img2, None)
+                # optical_flow = cv2.optflow.DualTVL1OpticalFlow_create()
+                # 使用gpu
+                optical_flow = cv2.cuda.DualTVL1OpticalFlow_create()
+                gpu_img1 = cv2.cuda_GpuMat()
+                gpu_img2 = cv2.cuda_GpuMat()
+                gpu_img1.upload(img1)
+                gpu_img2.upload(img2)
+                # flow = optical_flow.calc(img1, img2, None)
+                flow = optical_flow.calc(gpu_img1, gpu_img2, None)
                 magnitude, angle = cv2.cartToPolar(flow[..., 0], flow[..., 1])
                 u, v = pol2cart(magnitude, angle)
                 os = computeStrain(u, v)
