@@ -8,7 +8,9 @@ from tensorflow import keras
 from tensorflow.keras import layers
 from skimage.util import random_noise
 from Utils.mean_average_precision.mean_average_precision import MeanAveragePrecision2d
+import dlib
 
+print(dlib.DLIB_USE_CUDA)  # 输出 True 则表示启用了 GPU 支持
 # 设置随机种子
 random.seed(1)
 
