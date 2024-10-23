@@ -4,6 +4,7 @@ import cv2
 import dlib
 from tqdm import tqdm
 
+detector_model = "/kaggle/working/SoftNet-SpotME-test/Utils/mmod_human_face_detector.dat"
 
 def pol2cart(rho, phi):  # Convert polar coordinates to cartesian coordinates for computation of optical strain
     x = rho * np.cos(phi)
@@ -23,7 +24,8 @@ def computeStrain(u, v):
 def extract_preprocess(final_images, k):
     # predictor_model = "Utils\\shape_predictor_68_face_landmarks.dat"
     predictor_model = "/kaggle/working/SoftNet-SpotME-test/Utils/shape_predictor_68_face_landmarks.dat"
-    face_detector = dlib.get_frontal_face_detector()
+    # face_detector = dlib.get_frontal_face_detector()
+    face_detector = dlib.cnn_face_detection_model_v1(detector_model)  # CNN-based face detector with GPU
     face_pose_predictor = dlib.shape_predictor(predictor_model)
     dataset = []
     print("videos nums = ", len(final_images))
@@ -41,7 +43,9 @@ def extract_preprocess(final_images, k):
                         next_img += 1
                         reference_img = final_images[video][img_count + next_img]
                         detect = face_detector(reference_img, 1)
-                    shape = face_pose_predictor(reference_img, detect[0])
+                    # shape = face_pose_predictor(reference_img, detect[0])
+                    # For CNN detector, we need to extract rect from `dlib.mmod_rectangles`
+                    shape = face_pose_predictor(reference_img, detect[0].rect)
 
                     # Left Eye
                     x11 = max(shape.part(36).x - 15, 0)
