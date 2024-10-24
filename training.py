@@ -117,7 +117,8 @@ def generator(X, y, batch_size=12, epochs=1):
             os_tensor = tf.convert_to_tensor(os, dtype=tf.float32)
             y_tensor = tf.convert_to_tensor(np.array(y[start:end]), dtype=tf.float32)
 
-            yield [u_tensor, v_tensor, os_tensor], y_tensor
+            # 更新返回格式，以确保它是 ((u_tensor, v_tensor, os_tensor), y_tensor)
+            yield (u_tensor, v_tensor, os_tensor), y_tensor
 
 
 def shuffling(X, y):
