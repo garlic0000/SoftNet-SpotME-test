@@ -282,7 +282,7 @@ def training(X, y, groupsLabel, dataset_name, expression_type, final_samples, k,
         )
         result = model.predict(
             dataset,
-            steps=len(X_test) / batch_size,
+            steps=int(len(X_test) / batch_size),  # 将浮点数转换为整数
             verbose=1
         )
         preds, gt, total_gt = spotting(result, total_gt, final_samples, subject_count, dataset, k, metric_fn, p,
