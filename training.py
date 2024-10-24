@@ -180,8 +180,16 @@ def spotting(result, total_gt, final_samples, subject_count, dataset, k, metric_
         gt = []
         countVideo = len([video for subject in final_samples[:subject_count - 1] for video in subject])
         print('Video:', countVideo + videoIndex)
-        score_plot = np.array(
-            result[prev:prev + len(dataset[countVideo + videoIndex])])  # Get related frames to each video
+        # score_plot = np.array(
+        #         #     result[prev:prev + len(dataset[countVideo + videoIndex])])  # Get related frames to each video
+        # 更新
+        # 使用迭代器获取 score_plot
+        score_plot = []
+        for x in dataset.as_numpy_iterator():
+            score_plot.extend(x[0])  # 假设 result 的形状与 score_plot 兼容
+
+        score_plot = np.array(score_plot[prev:prev + len(dataset[countVideo + videoIndex])])
+
         score_plot_agg = score_plot.copy()
 
         # Score aggregation
