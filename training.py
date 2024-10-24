@@ -13,16 +13,16 @@ from Utils.mean_average_precision.mean_average_precision import MeanAveragePreci
 
 random.seed(1)
 
-# gpus = tf.config.experimental.list_physical_devices('GPU')
-# if gpus:
-#     try:
-#         # 设置内存按需增长
-#         for gpu in gpus:
-#             tf.config.experimental.set_memory_growth(gpu, True)
-#         logical_gpus = tf.config.experimental.list_logical_devices('GPU')
-#         print(len(gpus), "Physical GPUs,", len(logical_gpus), "Logical GPUs")
-#     except RuntimeError as e:
-#         print(e)
+gpus = tf.config.experimental.list_physical_devices('GPU')
+if gpus:
+    try:
+        # 设置内存按需增长
+        for gpu in gpus:
+            tf.config.experimental.set_memory_growth(gpu, True)
+        logical_gpus = tf.config.experimental.list_logical_devices('GPU')
+        print(len(gpus), "Physical GPUs,", len(logical_gpus), "Logical GPUs")
+    except RuntimeError as e:
+        print(e)
 
 SOFTNet_Weights_root_path = "/kaggle/input/softnet-weights/SOFTNet_Weights"
 
@@ -89,6 +89,18 @@ def normalize(images):
     return images
 
 
+# def generator(X, y, batch_size=12, epochs=1):
+#     while True:
+#         for start in range(0, len(X), batch_size):
+#             end = min(start + batch_size, len(X))
+#             num_images = end - start
+#             X[start:end] = normalize(X[start:end])
+#             u = np.array(X[start:end])[:, :, :, 0].reshape(num_images, 42, 42, 1)
+#             v = np.array(X[start:end])[:, :, :, 1].reshape(num_images, 42, 42, 1)
+#             os = np.array(X[start:end])[:, :, :, 2].reshape(num_images, 42, 42, 1)
+#             yield [u, v, os], np.array(y[start:end])
+
+# 更新
 def generator(X, y, batch_size=12, epochs=1):
     while True:
         for start in range(0, len(X), batch_size):
@@ -98,7 +110,14 @@ def generator(X, y, batch_size=12, epochs=1):
             u = np.array(X[start:end])[:, :, :, 0].reshape(num_images, 42, 42, 1)
             v = np.array(X[start:end])[:, :, :, 1].reshape(num_images, 42, 42, 1)
             os = np.array(X[start:end])[:, :, :, 2].reshape(num_images, 42, 42, 1)
-            yield [u, v, os], np.array(y[start:end])
+
+            # 将 NumPy 数组转换为 TensorFlow 张量
+            u_tensor = tf.convert_to_tensor(u, dtype=tf.float32)
+            v_tensor = tf.convert_to_tensor(v, dtype=tf.float32)
+            os_tensor = tf.convert_to_tensor(os, dtype=tf.float32)
+            y_tensor = tf.convert_to_tensor(np.array(y[start:end]), dtype=tf.float32)
+
+            yield [u_tensor, v_tensor, os_tensor], y_tensor
 
 
 def shuffling(X, y):
@@ -253,11 +272,11 @@ def training(X, y, groupsLabel, dataset_name, expression_type, final_samples, k,
                 weight_reset)  # Reset weights to ensure the model does not have info about current subject
             model.fit(
                 generator(X_train, y_train, batch_size, epochs),
-                steps_per_epoch=len(X_train) / batch_size,
+                steps_per_epoch=len(X_train) // batch_size,
                 epochs=epochs,
                 verbose=1,
                 validation_data=generator(X_test, y_test, batch_size),
-                validation_steps=len(X_test) / batch_size,
+                validation_steps=len(X_test) // batch_size,
                 shuffle=True,
             )
         else:
@@ -269,6 +288,9 @@ def training(X, y, groupsLabel, dataset_name, expression_type, final_samples, k,
         #     verbose=1
         # )
         # 更新
+        # None 表示批次大小不固定：shape=(None, 42, 42, 1) 中的 None 表示第一维度是批量大小（batch size）。
+        # 在数据生成或训练过程中，批量大小可以动态调整，或者可以是不固定的。
+        # 因此，None 使得数据管道和模型可以处理不同大小的批次。
         dataset = tf.data.Dataset.from_generator(
             lambda: generator(X_test, y_test, batch_size),
             output_signature=(
