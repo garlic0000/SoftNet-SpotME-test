@@ -269,8 +269,19 @@ def training(X, y, groupsLabel, dataset_name, expression_type, final_samples, k,
         #     verbose=1
         # )
         # 更新
+        dataset = tf.data.Dataset.from_generator(
+            lambda: generator(X_test, y_test, batch_size),
+            output_signature=(
+                (
+                    tf.TensorSpec(shape=(None, 42, 42, 1), dtype=tf.float32),
+                    tf.TensorSpec(shape=(None, 42, 42, 1), dtype=tf.float32),
+                    tf.TensorSpec(shape=(None, 42, 42, 1), dtype=tf.float32),
+                ),
+                tf.TensorSpec(shape=(None,), dtype=tf.float32)
+            )
+        )
         result = model.predict(
-            generator(X_test, y_test, batch_size),
+            dataset,
             steps=len(X_test) / batch_size,
             verbose=1
         )
