@@ -6,6 +6,7 @@ from tqdm import tqdm
 
 detector_model = "/kaggle/working/SoftNet-SpotME-test/Utils/mmod_human_face_detector.dat"
 
+
 def pol2cart(rho, phi):  # Convert polar coordinates to cartesian coordinates for computation of optical strain
     x = rho * np.cos(phi)
     y = rho * np.sin(phi)
@@ -115,15 +116,23 @@ def extract_preprocess(final_images, k):
                 # flow = optical_flow.calc(img1, img2, None)
                 flow = optical_flow.calc(gpu_img1, gpu_img2, None)
                 flow = flow.download()  # 从 GPU 下载到 CPU
+                # 转换为极坐标
                 magnitude, angle = cv2.cartToPolar(flow[..., 0], flow[..., 1])
+                # 转换成直角坐标
                 u, v = pol2cart(magnitude, angle)
                 os = computeStrain(u, v)
+                # 输出u v 的范围
+                print("Max u:", u.max(), "Min u:", u.min())
+                print("Max v:", v.max(), "Min v:", v.min())
+
 
                 # Features Concatenation into 128x128x3
                 final = np.zeros((128, 128, 3))
                 final[:, :, 0] = u
                 final[:, :, 1] = v
                 final[:, :, 2] = os
+
+
 
                 # Remove global head movement by minus nose region
                 final[:, :, 0] = abs(final[:, :, 0] - final[y61 - 5:y61 + 6, x61 - 5:x61 + 6, 0].mean())
