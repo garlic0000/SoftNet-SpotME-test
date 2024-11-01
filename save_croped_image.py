@@ -124,57 +124,5 @@ def crop_images(dataset_name):
                         tq.update()  # 更新进度
 
 
-def load_images(dataset_name):
-    images = []
-    subjects = []
-    subjectsVideos = []
-
-    if dataset_name == 'CASME_sq':
-        for i, dir_sub in enumerate(natsort.natsorted(Path(dir_crop_root_path).iterdir())):
-            print('Subject: ' + dir_sub.name)
-            subjects.append(dir_sub.name)
-            subjectsVideos.append([])
-            for dir_sub_vid in natsort.natsorted(dir_sub.iterdir()):
-                subjectsVideos[-1].append(dir_sub_vid.name.split('_')[1][
-                                          :4])  # Ex:'CASME_sq/rawpic_aligned/s15/15_0101disgustingteeth' -> '0101'
-                image = []
-                for dir_sub_vid_img in natsort.natsorted(glob.glob(os.path.join(str(dir_sub_vid), "*.jpg"))):
-                    image.append(cv2.imread(dir_sub_vid_img, 0))  # 加载灰度图像
-                images.append(np.array(image))
-
-    elif (dataset_name == 'SAMMLV'):
-        for i, dir_vid in enumerate(natsort.natsorted(glob.glob(dataset_name + "/SAMM_longvideos_crop/*"))):
-            print('Subject: ' + dir_vid.split('/')[-1].split('_')[0])
-            subject = dir_vid.split('/')[-1].split('_')[0]
-            subjectVideo = dir_vid.split('/')[-1]
-            if (subject not in subjects):  # Only append unique subject name
-                subjects.append(subject)
-                subjectsVideos.append([])
-            subjectsVideos[-1].append(dir_vid.split('/')[-1])
-
-            image = []
-            for dir_vid_img in natsort.natsorted(glob.glob(dir_vid + "/*.jpg")):
-                image.append(cv2.imread(dir_vid_img, 0))
-            image = np.array(image)
-            images.append(image)
-
-    return images, subjects, subjectsVideos
-
-
-def save_images_pkl(dataset_name, images, subjectsVideos, subjects):
-    # 设置保存的pkl路径
-    # 好像是当前路径
-    pickle.dump(images, open(dataset_name + "_images_crop.pkl", "wb"))
-    pickle.dump(subjectsVideos, open(dataset_name + "_subjectsVideos_crop.pkl", "wb"))
-    pickle.dump(subjects, open(dataset_name + "_subjects_crop.pkl", "wb"))
-
-
-def load_images_pkl(dataset_name):
-    images = pickle.load(open(dataset_name + "_images_crop.pkl", "rb"))
-    subjectsVideos = pickle.load(open(dataset_name + "_subjectsVideos_crop.pkl", "rb"))
-    subjects = pickle.load(open(dataset_name + "_subjects_crop.pkl", "rb"))
-    return images, subjectsVideos, subjects
-
-
 if __name__ == "__main__":
     crop_images('CASME_sq')

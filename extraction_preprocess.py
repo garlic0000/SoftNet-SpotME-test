@@ -42,11 +42,11 @@ def extract_preprocess(final_images, k):
             for img_count in range(final_images[video].shape[0] - k):
                 img1 = final_images[video][img_count]
                 img2 = final_images[video][img_count + k]
-                if (img_count == 0):
+                if img_count == 0:
                     reference_img = img1
                     detect = face_detector(reference_img, 1)
                     next_img = 0  # Loop through the frames until all the landmark is detected
-                    while (len(detect) == 0):
+                    while len(detect) == 0:
                         next_img += 1
                         reference_img = final_images[video][img_count + next_img]
                         detect = face_detector(reference_img, 1)
